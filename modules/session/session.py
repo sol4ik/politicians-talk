@@ -6,7 +6,7 @@ import datetime
 
 class Session:
     """
-    Class for representaion of Ukrainian Verkhovna Rada session.
+    Class for representation of Ukrainian Verkhovna Rada session.
     """
     def __init__(self, convocation_no=8, url='', number=0, date=datetime.datetime.now(), announcer=''):
         """
@@ -14,6 +14,7 @@ class Session:
         """
         self.convocation_no = convocation_no
         self.url = url
+
         self.number = number
         self.date = date
         self.announcer = announcer
