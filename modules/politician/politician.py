@@ -2,11 +2,13 @@ class Politician:
     """
     Class for representing politician of Ukrainian Verkhovna Rada.
     """
-    def __init__(self, name='', skl=[]):
+    def __init__(self, name='', convocation_no=[], json_path=''):
         self.name = name
-        self.skl = skl
-        self._presence = None  # ? or []
-        self._ideas = None  # ? or []
+        self.convocation_no = convocation_no
+        self._presence = None
+        self._ideas = None
+
+        self._json_file = json_path
 
     @property
     def presence(self):
@@ -24,6 +26,17 @@ class Politician:
     def ideas(self, values):
         self._ideas = values
 
-    # ???
-    def to_json(self):
+    @property
+    def json_file(self):
+        return self._json_file
+
+    @json_file.setter
+    def json_file(self, value):
+        self._json_file = value
+
+    def ideas_timeline(self):
+        """
+        (Politician) -> dict
+        Function for creating a timeline of politician's main ideas.
+        """
         pass

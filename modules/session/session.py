@@ -8,14 +8,13 @@ class Session:
     """
     Class for representation of Ukrainian Verkhovna Rada session.
     """
-    def __init__(self, convocation_no=8, url='', number=0, date=datetime.datetime.now(), announcer=''):
+    def __init__(self, url='', convocation_no=8, date=datetime.datetime.now(), announcer=''):
         """
         Initial function for Session object.
         """
-        self.convocation_no = convocation_no
         self.url = url
+        self.convocation_no = convocation_no
 
-        self.number = number
         self.date = date
         self.announcer = announcer
         self._stenogram = None
@@ -28,8 +27,8 @@ class Session:
     def stenogram(self, text):
         self._stenogram = text
 
-    def parse(self):
-        page_response = requests.get(self.url[:-1], timeout=1)
+    def parse_html(self):
+        page_response = requests.get(self.url, timeout=1)
         page_content = BeautifulSoup(page_response.content, "html.parser")
 
         text_content = []
@@ -37,5 +36,8 @@ class Session:
             paragraphs = page_content.find_all("p", attrs={"align": None})[i].text
             text_content.append(paragraphs)
 
-        self._stenogram
-        # text_content = stenogram_format(text_content)
+        self.stenogram(text_content)
+
+    def parse_text(self, stenogram_text):
+        lst = []
+        return lst
