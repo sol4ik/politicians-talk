@@ -1,1 +1,2 @@
-# politicians-talk-cw
+# politicians-talk
+Курсова робота з основ програмування Леньо Соломії.
