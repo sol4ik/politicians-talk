@@ -1,32 +1,45 @@
 from bs4 import BeautifulSoup
 import requests
 
-import datetime
+from datetime import date, datetime
+import re
 
 
 class Session:
     """
     Class for representation of Ukrainian Verkhovna Rada session.
     """
-    def __init__(self, url='', convocation_no=8, date=datetime.datetime.now(), announcer=''):
+    def __init__(self, url='', convocation_no=8, session_date=datetime.now(), announcer=''):
         """
         Initial function for Session object.
         """
-        self.url = url
+        self.__url = url
         self.convocation_no = convocation_no
 
-        self.date = date
+        self.session_date = session_date
         self.announcer = announcer
-        self._stenogram = None
+        self.__stenogram = None
+
+    def __str__(self):
+        pass
 
     @property
     def stenogram(self):
-        return self._stenogram
+        return self.__stenogram
 
     @stenogram.setter
     def stenogram(self, text):
-        self._stenogram = text
+        self.__stenogram = text
 
+    def set_date(self):
+        url = self.url
+        pattern = r'\d{8}'
+        session_date = re.search(pattern, url)
+        session_date = session_date[:4] + '-' + session_date[4:6] + '-' + session_date[6:]
+        session_date = date.fromisoformat(session_date)
+        self.session_date = session_date
+
+    @staticmethod
     def parse_html(self):
         page_response = requests.get(self.url, timeout=1)
         page_content = BeautifulSoup(page_response.content, "html.parser")
@@ -38,6 +51,17 @@ class Session:
 
         self.stenogram(text_content)
 
-    def parse_text(self, stenogram_text):
-        lst = []
-        return lst
+    def set_announcer(self):
+        pass
+
+    def get_url(self):
+        pass
+
+    def parse_text(self):
+        return True
+
+    def analyze(self):
+        pass
+
+    def phrase_analysis(self):
+        pass

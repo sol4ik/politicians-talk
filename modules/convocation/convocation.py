@@ -31,6 +31,9 @@ class Convocation:
     def json_file(self, value):
         self._json_file = value
 
+    def __str__(self):
+        pass
+
     def ideas_rating(self):
         """
         Function for creating a rating of the most popular ideas among politicians of current convocation.

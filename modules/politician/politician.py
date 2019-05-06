@@ -1,3 +1,6 @@
+import json
+
+
 class Politician:
     """
     Class for representing politician of Ukrainian Verkhovna Rada.
@@ -34,9 +37,41 @@ class Politician:
     def json_file(self, value):
         self._json_file = value
 
+    def __str__(self):
+        pass
+
     def ideas_timeline(self):
         """
         (Politician) -> dict
         Function for creating a timeline of politician's main ideas.
+        """
+        pass
+
+    def ideas_rating(self, n):
+        """
+        (Politician) -> dict
+        Function for creating a rating of top [n] politician's main ideas.
+        """
+        pass
+
+    def presence_calendar(self):
+        """
+        (Politician) -> list(list)
+        Function for creating a calendar of politician's presence on the sessions.
+        """
+        pass
+
+    def to_json(self):
+        """
+        (Politician) -> .json file
+        Function for writing all the data on Politician object to a .json file.
+        """
+        pass
+
+    @classmethod
+    def from_json(cls, file_path):
+        """
+        (str) -> Politician
+        Function for creating a Politician object with the data from the .json file.
         """
         pass
