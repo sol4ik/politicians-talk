@@ -1,3 +1,5 @@
+from idea.idea import Idea
+
 import json
 
 
@@ -8,65 +10,102 @@ class Politician:
     def __init__(self, name='', convocation_no=[], json_path=''):
         self.name = name
         self.convocation_no = convocation_no
-        self._presence = None
-        self._ideas = None
 
-        self._json_file = json_path
+        self.__presence = None
+        self.__ideas = None
+
+        self.__json_file = json_path
 
     @property
     def presence(self):
-        return self._presence
+        return self.__presence
 
     @presence.setter
     def presence(self, values):
-        self._presence = values
+        self.__presence = values
 
     @property
     def ideas(self):
-        return self._ideas
+        return self.__ideas
 
     @ideas.setter
     def ideas(self, values):
-        self._ideas = values
+        self.__ideas = values
 
     @property
     def json_file(self):
-        return self._json_file
+        return self.__json_file
 
     @json_file.setter
     def json_file(self, value):
-        self._json_file = value
+        self.__json_file = value
 
     def __str__(self):
-        pass
+        """
+        (Politician) -> str
+        Returns string that describes Politician object.
+        """
+        return self.name
 
     def ideas_timeline(self):
         """
         (Politician) -> dict
         Function for creating a timeline of politician's main ideas.
         """
-        pass
+        timeline = dict()
+        # '01.04.2019' : ['війна', 'Крим', 'газ']
+        for idea in self.__ideas:
+            if idea.session_date in timeline:
+                timeline[idea.session_date].append(idea)
+            else:
+                timeline[idea.session_date] = [idea]
+        return timeline
 
     def ideas_rating(self, n):
         """
         (Politician) -> dict
         Function for creating a rating of top [n] politician's main ideas.
         """
-        pass
+        counter = dict()
+        # 'РФ' : 2
+        # 'газ': 1
+        for idea in self.__ideas:
+            if idea.name in counter:
+                counter[idea.name] += 1
+            else:
+                counter[idea.name] = 1
 
-    def presence_calendar(self):
-        """
-        (Politician) -> list(list)
-        Function for creating a calendar of politician's presence on the sessions.
-        """
-        pass
+        # get top n
+        # 1: 'РФ'
+        # 2: 'газ'
+        top_n = dict()
+        max = 0
+        max_key = 0
+        count = 1
+        while len(top_n) != n:
+            for key in counter:
+                if counter[key] > max:
+                    max = counter[key]
+                    max_key = key
+            top_n[max_key] = count
+            count += 1
+            counter[max_key] = 0
+        return top_n
 
     def to_json(self):
         """
         (Politician) -> .json file
         Function for writing all the data on Politician object to a .json file.
         """
-        pass
+        data = dict()
+        data["politician"] = {
+            "name": self.name,
+            "convocation_no": ', '.join(self.convocation_no),
+            "presence": self.__presence,
+            "ideas": ', '.join([str(idea) for idea in self.__ideas])
+        }
+        with open(self.json_file, 'w') as write_file:
+            json.dump(data, write_file)
 
     @classmethod
     def from_json(cls, file_path):
@@ -74,4 +113,18 @@ class Politician:
         (str) -> Politician
         Function for creating a Politician object with the data from the .json file.
         """
-        pass
+        new_pol = Politician()
+
+        with open(file_path) as read_file:
+            data = json.load(read_file)
+
+        new_pol.name = data["politician"]["name"]
+        new_pol.convocation_no = data["politician"]["convocation_no"]
+        new_pol.presence = data["politician"]["presence"]
+
+        new_pol.ideas = []
+        for el in data["politician"]["ideas"].split(','):
+            idea = Idea(name=el)
+            new_pol.ideas.append(idea)
+
+        new_pol.json_file = file_path
