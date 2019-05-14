@@ -1,3 +1,6 @@
+from politician.politician import Politician
+from idea.idea import Idea
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -15,6 +18,7 @@ class Session:
         Initial function for Session object.
         """
         self.__url = url
+        # to Convocation obj
         self.convocation_no = convocation_no
 
         self.session_date = session_date
@@ -66,7 +70,7 @@ class Session:
             paragraphs = page_content.find_all("p", attrs={"align": None})[i].text
             text_content.append(paragraphs)
 
-        self.script(text_content)
+        self.__script = text_content
 
     def set_date(self):
         """
@@ -85,25 +89,65 @@ class Session:
         (Session) -> none
         Parse the session announcer from the script and set it.
         """
-        pass
+        pos = self.__script.find('\n')
+        line = self.__script[:pos]
+        while "Засідання веде" not in line:
+            pos2 = pos
+            pos = self.__script.find('\n', pos2 + 1)
+            line = self.__script[pos2:pos]
+        pattern = r'[А-Я]\.[А-Я]\.[А-Я]+'
+        announcer = re.search(pattern, line)
 
-    def parse_text(self):
+        self.announcer = announcer
+
+    def create_politicians(self):
         """
-        (Session) -> none
+        (Session) -> list(Politician)
+        Creates and updates Politicians objects.
+        Assigns them to corresponding convocation.
+        """
+        politicians = list()
+
+        pattern = r'[А-Я]+\s[А-Я]\.[А-Я]\.'
+        pos = 0
+        while '\n' in self.__script[pos:]:
+            pos2 = pos
+            pos = self.__script.find('\n', pos2 + 1)
+            line = self.__script[pos2:pos]
+            pol = re.search(pattern, line)
+            if pol is not None:
+                pol = pol[0]
+
+                politician_obj = Politician(name=pol,
+                                            convocation_no=[self.convocation_no])
+                self.parse_phrase(politician_obj)
+
+                politicians.append(politician_obj)
+
+        return politicians
+
+    def parse_phrase(self, politician):
+        """
+        (Session) -> None
         Parse the session speech text from the script and set it.
         """
-        pass
+        name = politician.name
+        text = ''
+        ideas = self.phrase_analysis(text)
+        if ideas:
+            politician.ideas.extend(ideas)
 
     def analyze(self):
         """
-        (Session) -> none
+        (Session) -> None
         Analyze the script text.
         """
         pass
 
-    def phrase_analysis(self):
+    def phrase_analysis(self, text):
         """
-
-        :return:
+        (Session) -> list(Idea)
+        Returns list of Ideas
         """
-        pass
+        ideas = list()
+        return ideas

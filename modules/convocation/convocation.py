@@ -49,6 +49,13 @@ class Convocation:
         """
         return self.no
 
+    def __contains__(self, politician):
+        """
+        (Convocation, Politician) -> bool
+        Checks if Politician o
+        """
+        return politician in self.__politicians_list
+
     def politician_calendar(self, politician):
         """
         (Convocation, Politician) -> list(list)
