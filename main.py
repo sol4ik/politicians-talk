@@ -29,6 +29,24 @@ for filename in os.listdir('docs/stenograms_lists'):
                 new_session.set_date()
 
                 date = new_session.session_date
-                print('\t\tworking on {} session...'. format(date))  # to track progress
+                print('\t\tparsing {} session...'. format(date))  # to track progress
 
                 new_session.parse_html()
+
+                new_session.set_announcer()
+                print('\t\tformatting {} session...'.format(date))  # to track progress
+                new_session.format()
+
+                print('\t\t\tcreating\\updating politicians...'.format(date))  # to track progress
+                new_session.create_politicians()
+
+                # to_phrases
+                #   phrase_analysis
+                #   create Idea objs
+                #   update Politician objs
+                #   update Convocation objs
+                # update Session obj
+
+                # get all Politician objs
+                # get all Convocation objs
+                # final update
