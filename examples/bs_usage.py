@@ -5,6 +5,7 @@ import re
 
 import os
 
+
 def write_files(n):
     """
     n - номер скликання 1-8

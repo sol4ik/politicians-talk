@@ -1,4 +1,4 @@
-from idea.idea import Idea
+from ..idea.idea import Idea
 
 import json
 

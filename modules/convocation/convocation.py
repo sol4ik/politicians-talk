@@ -1,4 +1,5 @@
-from politician.politician import Politician
+from ..politician.politician import Politician
+
 
 class Convocation:
     def __init__(self, no=8, amount=450, json_path=''):

@@ -1,5 +1,5 @@
-from politician.politician import Politician
-from idea.idea import Idea
+from ..politician.politician import Politician
+from ..idea.idea import Idea
 
 from bs4 import BeautifulSoup
 import requests
@@ -12,12 +12,12 @@ class Session:
     """
     Class for representation of Ukrainian Verkhovna Rada session.
     """
-    def __init__(self, url='', convocation_no=8, session_date=datetime.now(), announcer=''):
+    def __init__(self, convocation_no=8, session_date=datetime.now(), announcer=''):
         """
         (Session, str, int, datetime obj, str) -> None
         Initial function for Session object.
         """
-        self.__url = url
+        self.__url = ''
         # to Convocation obj
         self.convocation_no = convocation_no
 
@@ -31,15 +31,15 @@ class Session:
         Returns string describing the Session object.
         """
         txt = ''
-
         return txt
 
-    def get_url(self):
-        """
-        (Session) -> str
-        Returns Session object url.
-        """
+    @property
+    def url(self):
         return self.__url
+
+    @url.setter
+    def url(self, value):
+        self.__url = value
 
     @property
     def script(self):
@@ -136,6 +136,27 @@ class Session:
         ideas = self.phrase_analysis(text)
         if ideas:
             politician.ideas.extend(ideas)
+
+    def format(self, text):
+        # get rid of capital letters
+        text.lower()
+
+        # get rid of comments
+        pos = 0
+        pos2 = 0
+        for el in text:
+            if el == '(':
+                pos = text.find(el, pos + 1)
+            elif el == ')':
+                pos2 = text.find(el, pos2 + 1)
+                text = text[:pos] + text[pos2 + 1:]
+
+        COMMENTS = ['ГОЛОСИ ІЗ ЗАЛУ', 'ПІСЛЯ ПЕРЕРВИ']
+
+        # get rid of time comments
+        pattern = r'\d{2}:\d{2}:\d{2}'
+        re.sub(pattern, '', text)
+        return text
 
     def analyze(self):
         """
