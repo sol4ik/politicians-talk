@@ -70,7 +70,15 @@ class Session:
             paragraphs = page_content.find_all("p", attrs={"align": None})[i].text
             text_content.append(paragraphs)
 
-        self.__script = text_content
+        filename = '../../docs/scripts/skl{}/session_{}.txt'.format(self.convocation_no,
+                                                                    self.session_date)
+        with open(filename, 'w') as write_file:
+            write_file.write(text_content)
+        # write_file = open(filename, 'w')
+        # write_file.write(text_content)
+        # write_file.close()
+
+        self.__script = filename
 
     def set_date(self):
         """
@@ -79,7 +87,7 @@ class Session:
         """
         url = self.__url
         pattern = r'\d{8}'
-        session_date = re.search(pattern, url)
+        session_date = re.search(pattern, url)[0]
         session_date = session_date[:4] + '-' + session_date[4:6] + '-' + session_date[6:]
         session_date = date.fromisoformat(session_date)
         self.session_date = session_date
@@ -89,12 +97,15 @@ class Session:
         (Session) -> none
         Parse the session announcer from the script and set it.
         """
-        pos = self.__script.find('\n')
-        line = self.__script[:pos]
+        with open(self.__script, 'r') as read_file:
+            text = ''.join(read_file.readlines())
+
+        pos = text.find('\n')
+        line = text[:pos]
         while "Засідання веде" not in line:
             pos2 = pos
-            pos = self.__script.find('\n', pos2 + 1)
-            line = self.__script[pos2:pos]
+            pos = text.find('\n', pos2 + 1)
+            line = text[pos2:pos]
         pattern = r'[А-Я]\.[А-Я]\.[А-Я]+'
         announcer = re.search(pattern, line)
 
@@ -107,26 +118,20 @@ class Session:
         Assigns them to corresponding convocation.
         """
         politicians = list()
-
         pattern = r'[А-Я]+\s[А-Я]\.[А-Я]\.'
-        pos = 0
-        while '\n' in self.__script[pos:]:
-            pos2 = pos
-            pos = self.__script.find('\n', pos2 + 1)
-            line = self.__script[pos2:pos]
-            pol = re.search(pattern, line)
-            if pol is not None:
-                pol = pol[0]
 
-                politician_obj = Politician(name=pol,
-                                            convocation_no=[self.convocation_no])
-                self.parse_phrase(politician_obj)
+        with open(self.__script, 'r') as read_file:
+            for line in read_file.readlines():
+                pol = re.search(pattern, line)
+                if pol is not None:
+                    pol = pol[0]
+                    politician_obj = Politician(name=pol,
+                                                convocation_no=[self.convocation_no])
 
-                politicians.append(politician_obj)
-
+                    politicians.append(politician_obj)
         return politicians
 
-    def parse_phrase(self, politician):
+    def to_phrases(self, politician):
         """
         (Session) -> None
         Parse the session speech text from the script and set it.
@@ -137,11 +142,11 @@ class Session:
         if ideas:
             politician.ideas.extend(ideas)
 
-    def format(self, text):
-        # get rid of capital letters
-        text.lower()
+    def format(self):
+        with open(self.__script, 'r') as read_file:
+            text = ''.join(read_file.readlines())
 
-        # get rid of comments
+        # get rid of comments in brackets
         pos = 0
         pos2 = 0
         for el in text:
@@ -151,11 +156,14 @@ class Session:
                 pos2 = text.find(el, pos2 + 1)
                 text = text[:pos] + text[pos2 + 1:]
 
-        COMMENTS = ['ГОЛОСИ ІЗ ЗАЛУ', 'ПІСЛЯ ПЕРЕРВИ']
-
         # get rid of time comments
-        pattern = r'\d{2}:\d{2}:\d{2}'
-        re.sub(pattern, '', text)
+        time_pattern = r'\d{2}:\d{2}:\d{2}'
+        re.sub(time_pattern, '', text)
+
+        # get rid of comments in capital letters
+        comment_pattern = r'[А-Я]+'
+
+
         return text
 
     def analyze(self):
