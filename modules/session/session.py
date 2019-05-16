@@ -4,15 +4,18 @@ from ..idea.idea import Idea
 from bs4 import BeautifulSoup
 import requests
 
-from datetime import date, datetime
+from datetime import date
 import re
+import os
+
+from .exception.exception import ParseError
 
 
 class Session:
     """
     Class for representation of Ukrainian Verkhovna Rada session.
     """
-    def __init__(self, convocation_no=8, session_date=datetime.now(), announcer=''):
+    def __init__(self, convocation_no=8, session_date='', announcer=''):
         """
         (Session, str, int, datetime obj, str) -> None
         Initial function for Session object.
@@ -70,15 +73,18 @@ class Session:
             paragraphs = page_content.find_all("p", attrs={"align": None})[i].text
             text_content.append(paragraphs)
 
-        filename = '../../docs/scripts/skl{}/session_{}.txt'.format(self.convocation_no,
-                                                                    self.session_date)
-        with open(filename, 'w') as write_file:
-            write_file.write(text_content)
-        # write_file = open(filename, 'w')
-        # write_file.write(text_content)
-        # write_file.close()
+        if text_content:
 
-        self.__script = filename
+            filename = 'docs/scripts/skl{}/session_{}.txt'.format(self.convocation_no,
+                                                                        self.session_date)
+            filename = os.path.relpath(filename, os.getcwd())
+            with open(filename, 'w') as write_file:
+                write_file.write(''.join(text_content))
+
+            self.__script = filename
+
+        else:
+            raise ParseError(self.session_date)
 
     def set_date(self):
         """
@@ -123,53 +129,54 @@ class Session:
         with open(self.__script, 'r') as read_file:
             for line in read_file.readlines():
                 pol = re.search(pattern, line)
-                if pol is not None:
-                    pol = pol[0]
+                if pol is not None or 'ГОЛОВУЮЧИЙ' in line:
+                    if 'ГОЛОВУЮЧИЙ' in line:
+                        pol = self.announcer
+                    else:
+                        pol = pol[0]
                     politician_obj = Politician(name=pol,
                                                 convocation_no=[self.convocation_no])
-
                     politicians.append(politician_obj)
         return politicians
+
+    def format(self):
+        text = ''
+        with open(self.__script, 'r') as read_file:
+            for line in read_file.readlines():
+                new_line = line
+
+                # get rid of time comments
+                time_pattern = r'\d{2}:\d{2}:\d{2}'
+                if re.search(time_pattern, new_line):
+                    re.sub(time_pattern, '', new_line)
+
+                # get rid of comments in brackets
+                if '(' and ')' in new_line:
+                    pos = new_line.find('(')
+                    pos2 = new_line.find(')')
+                    new_line = new_line[:pos] + new_line[pos2+1:]
+                elif '(' in new_line:
+                    pos = new_line.find('(')
+                    new_line = new_line[:pos]
+                elif ')' in new_line:
+                    pos = new_line.find(')')
+                    new_line = new_line[pos+1:]
+
+                # get rid of comments in capital letters
+                comment_pattern = r'[А-Я]+'
+                name_pattern = r'[А-Я]+\s[А-Я]\.[А-Я]\.'
+                if re.search(comment_pattern,new_line) and re.search(name_pattern, new_line) is None and\
+                        'ГОЛОВУЮЧИЙ' not in new_line:
+                    re.sub(comment_pattern, '',new_line)
+                text += new_line
+
+            with (self.__script, 'w') as write_file:
+                write_file.write(text)
 
     def to_phrases(self, politician):
         """
         (Session) -> None
-        Parse the session speech text from the script and set it.
-        """
-        name = politician.name
-        text = ''
-        ideas = self.phrase_analysis(text)
-        if ideas:
-            politician.ideas.extend(ideas)
-
-    def format(self):
-        with open(self.__script, 'r') as read_file:
-            text = ''.join(read_file.readlines())
-
-        # get rid of comments in brackets
-        pos = 0
-        pos2 = 0
-        for el in text:
-            if el == '(':
-                pos = text.find(el, pos + 1)
-            elif el == ')':
-                pos2 = text.find(el, pos2 + 1)
-                text = text[:pos] + text[pos2 + 1:]
-
-        # get rid of time comments
-        time_pattern = r'\d{2}:\d{2}:\d{2}'
-        re.sub(time_pattern, '', text)
-
-        # get rid of comments in capital letters
-        comment_pattern = r'[А-Я]+'
-
-
-        return text
-
-    def analyze(self):
-        """
-        (Session) -> None
-        Analyze the script text.
+        Divide the session script to phrases and analyse each.
         """
         pass
 

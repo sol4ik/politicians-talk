@@ -48,9 +48,11 @@ def write_files(n):
     for link in sten_links:
         pattern = r'\d{8}-?\d?'
         f_name = re.search(pattern, link)
-        sten = open('../docs/stenograms/skl' + str(n) + '/stenogram_' + str(f_name.group(0)) + '.htm', mode='w')
+        nn = '../docs/scripts/skl' + str(n) + '/session_' + str(f_name.group(0)) + '.htm'
+        nn = os.path.relpath(nn, os.getcwd())
+        sten = open(nn, 'w')
 
-        page_response = requests.get(link[:-1], timeout=1)
+        page_response = requests.get(link[:-1], timeout=5)
         page_content = BeautifulSoup(page_response.content, "html.parser")
 
         text_content = []
