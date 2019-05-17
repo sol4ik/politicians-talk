@@ -2,7 +2,14 @@ from ..politician.politician import Politician
 
 
 class Convocation:
+    """
+    Class for representation of politicians' Convocation.
+    """
     def __init__(self, no=8, amount=450, json_path=''):
+        """
+        (Convocation, int, int, str) -> None
+        Initial function for Convocation object.
+        """
         self.no = no
         self.politicians_amount = amount
         self.__politicians_list = list()
@@ -13,34 +20,66 @@ class Convocation:
 
     @property
     def politicians_list(self):
+        """
+        (Convocation) -> list()
+        Returns value of Convocation object __politicians_list field.
+        """
         return self.__politicians_list
 
     @politicians_list.setter
     def politicians_list(self, values):
+        """
+        (Convocation, list()) -> None
+        Setter for Convocation object __politicians_list field.
+        """
         self.__politicians_list = values
 
     @property
     def sessions_calendar(self):
+        """
+        (Convocation) -> list()
+        Returns value of Convocation object __sessions_calendar field.
+        """
         return self.__sessions_calendar
 
     @sessions_calendar.setter
     def sessions_calendar(self, value):
+        """
+        (Convocation, list()) -> None
+        Setter for Convocation object __sessions_calendar field.
+        """
         self.__sessions_calendar = value
 
     @property
     def ideas(self):
+        """
+        (Convocation) -> list()
+        Returns value of Convocation object __ideas field.
+        """
         return self.__ideas
 
     @ideas.setter
     def ideas(self, values):
+        """
+        (Convocation, list()) -> None
+        Setter for Convocation object __ideas field.
+        """
         self.__ideas = values
 
     @property
     def json_file(self):
+        """
+        (Convocation) -> str
+        Returns value of Convocation object __json_file field.
+        """
         return self.__json_file
 
     @json_file.setter
     def json_file(self, value):
+        """
+        (Convocation, str) -> None
+        Setter for Convocation object __json_file field.
+        """
         self.__json_file = value
 
     def __str__(self):
@@ -48,12 +87,12 @@ class Convocation:
         (Convocation) -> str
         Returns string that describes Convocation object.
         """
-        return self.no
+        return "Convocation #{}".format(self.no)
 
     def __contains__(self, politician):
         """
         (Convocation, Politician) -> bool
-        Checks if Politician is in Convocarion.
+        Checks if Politician is in Convocation.
         """
         return politician.name in [pol.name for pol in self.__politicians_list]
 
@@ -75,6 +114,7 @@ class Convocation:
 
     def ideas_rating(self):
         """
+        (Convocation) -> dict
         Function for creating a rating of the most popular ideas among politicians of current convocation.
         """
         counter = dict()

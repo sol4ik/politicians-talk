@@ -8,6 +8,10 @@ class Politician:
     Class for representing politician of Ukrainian Verkhovna Rada.
     """
     def __init__(self, name='', convocation_no=[], json_path=''):
+        """
+        (Politician, str, list(int), str) -> None
+        Initial function for the Politician object.
+        """
         self.name = name
         self.convocation_no = convocation_no
 
@@ -18,26 +22,50 @@ class Politician:
 
     @property
     def presence(self):
+        """
+        (Politician) -> list(str)
+        Returns list of dates when Politician was present at the sessions.
+        """
         return self.__presence
 
     @presence.setter
     def presence(self, values):
+        """
+        (Politician, list()) -> None
+        Setter for Politician object __presence field.
+        """
         self.__presence = values
 
     @property
     def ideas(self):
+        """
+        (Politician) -> list(str)
+        Returns list of Politician's ideas.
+        """
         return self.__ideas
 
     @ideas.setter
     def ideas(self, values):
+        """
+        (Politician, list()) -> None
+        Setter for Politician object __ideas field.
+        """
         self.__ideas = values
 
     @property
     def json_file(self):
+        """
+        (Politician) -> list(str)
+        Returns path to .json file on Politician object.
+        """
         return self.__json_file
 
     @json_file.setter
     def json_file(self, value):
+        """
+        (Politician, list()) -> None
+        Setter for Politician object __json_file field.
+        """
         self.__json_file = value
 
     def __str__(self):

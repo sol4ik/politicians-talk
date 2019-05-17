@@ -1,10 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 
-#to do:
-def format_html():
-    pass
-
 
 link = 'http://data.rada.gov.ua/ogd/zal/agenda/skl8/sten/20141127.htm'
 

@@ -41,10 +41,18 @@ class Session:
 
     @property
     def url(self):
+        """
+        (Session) -> str
+        Returns Session object url address.
+        """
         return self.__url
 
     @url.setter
     def url(self, value):
+        """
+        (Session, str) -> None
+        Setter for a Session __url field.
+        """
         self.__url = value
 
     @property
@@ -144,6 +152,12 @@ class Session:
         return politicians
 
     def format(self):
+        """
+        (Session) -> None
+        Format session script:
+        - delete comments
+        - delete insignificant words (conjunctions etc.)
+        """
         to_del_words = ''
         with open(os.path.relpath('modules/session/docs/to_del_words.txt',
                                   os.getcwd()), 'r') as read_file:
@@ -208,16 +222,20 @@ class Session:
                             politician = self.announcer
                             phrase = re.sub('ГОЛОВУЮЧИЙ', '', phrase)
 
-                        print('_____________________________________')
-                        print(phrase)
-                        self.__phrase_analysis(politician, phrase)
+                        dots = re.findall(r'\.', phrase)
+                        if len(dots) > 1:
+                            print('-------------')
+                            print(phrase)
+                            self.__phrase_analysis(politician, phrase)
                     phrase = ''
                     phrase += line
 
     def __phrase_analysis(self, politician, phrase):
         """
-        (Session) -> list(Idea)
-        Returns list of Ideas
+        (Session) -> None
+        Extracts politician from the phrase.
+        Creates the Analyser object and executes the analysis.
+        Creates the Idea objects and updates Politician and Convocation objects.
         """
         politician = self.convocation.search_politician(politician)
 
