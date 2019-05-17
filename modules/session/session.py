@@ -208,6 +208,8 @@ class Session:
                             politician = self.announcer
                             phrase = re.sub('ГОЛОВУЮЧИЙ', '', phrase)
 
+                        print('_____________________________________')
+                        print(phrase)
                         self.__phrase_analysis(politician, phrase)
                     phrase = ''
                     phrase += line

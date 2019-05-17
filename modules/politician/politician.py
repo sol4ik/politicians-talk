@@ -12,7 +12,7 @@ class Politician:
         self.convocation_no = convocation_no
 
         self.__presence = None
-        self.__ideas = None
+        self.__ideas = list()
 
         self.__json_file = json_path
 
