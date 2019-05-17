@@ -10,11 +10,12 @@ import re
 
 convocations = list()
 sessions = list()
-politicians = list()
+politicians = set()
 
 print('> start')  # to track progress
 for filename in os.listdir('docs/stenograms_lists'):
-    if filename != "stenograms":
+    # if filename != "stenograms":
+    if filename == "stenograms_skl81.list":
         path = 'docs/stenograms_lists/' + filename
         path = os.path.relpath(path)
         with open(path, 'r') as read_file:
@@ -31,7 +32,7 @@ for filename in os.listdir('docs/stenograms_lists'):
             for line in read_file.readlines():
                 url = line[:-1]
 
-                new_session = Session()
+                new_session = Session(convocation=new_conv)
                 sessions.append(new_session)
                 new_session.url = url
 
@@ -45,13 +46,19 @@ for filename in os.listdir('docs/stenograms_lists'):
                 except ParseError as err:
                     print(err)
                     continue
-                # new_session.set_announcer()
-                # print('>    formatting {} session...'.format(date))  # to track progress
-                # new_session.format()
-                #
-                # print('>    creating\\updating politicians...'.format(date))  # to track progress
-                # pols = new_session.create_politicians()
-                # new_conv.politicians_list.extend(pols)
+
+                new_session.set_announcer()
+                print('>    formatting {} session...'.format(date))  # to track progress
+                new_session.format()
+
+                print('>    creating\\updating politicians...'.format(date))  # to track progress
+                pols = new_session.create_politicians()
+                politicians.union(pols)
+
+                new_conv.politicians_list.extend(pols)
+
+                print('>    dividing into phrases and analysing...'.format(date))  # to track progress
+                new_session.to_phrases()
 
                 # to_phrases
                 #   phrase_analysis

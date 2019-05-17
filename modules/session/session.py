@@ -1,3 +1,4 @@
+from ..convocation.convocation import Convocation
 from ..politician.politician import Politician
 from ..idea.idea import Idea
 
@@ -15,14 +16,14 @@ class Session:
     """
     Class for representation of Ukrainian Verkhovna Rada session.
     """
-    def __init__(self, convocation_no=8, session_date='', announcer=''):
+    def __init__(self, convocation=Convocation(), session_date='', announcer=''):
         """
         (Session, str, int, datetime obj, str) -> None
         Initial function for Session object.
         """
         self.__url = ''
         # to Convocation obj
-        self.convocation_no = convocation_no
+        self.convocation = convocation
 
         self.session_date = session_date
         self.announcer = announcer
@@ -65,21 +66,22 @@ class Session:
         (Session) -> None
         Parse the script text from the API.
         """
-        page_response = requests.get(self.__url, timeout=1)
+        print(self.__url)
+        page_response = requests.get(self.__url, timeout=5)
         page_content = BeautifulSoup(page_response.content, "html.parser")
 
         text_content = []
-        for i in range(0, len(page_content.find_all("p", attrs={"align": None}))):
-            paragraphs = page_content.find_all("p", attrs={"align": None})[i].text
+        for i in range(0, len(page_content.find_all("p"))):
+            paragraphs = page_content.find_all("p")[i].text
             text_content.append(paragraphs)
 
         if text_content:
 
-            filename = 'docs/scripts/skl{}/session_{}.txt'.format(self.convocation_no,
-                                                                        self.session_date)
+            filename = 'docs/scripts/skl{}/session_{}.txt'.format(self.convocation.no,
+                                                                  self.session_date)
             filename = os.path.relpath(filename, os.getcwd())
             with open(filename, 'w') as write_file:
-                write_file.write(''.join(text_content))
+                write_file.write('\n'.join(text_content))
 
             self.__script = filename
 
@@ -96,34 +98,31 @@ class Session:
         session_date = re.search(pattern, url)[0]
         session_date = session_date[:4] + '-' + session_date[4:6] + '-' + session_date[6:]
         session_date = date.fromisoformat(session_date)
+
         self.session_date = session_date
+        self.convocation.sessions_calendar.append(session_date)
 
     def set_announcer(self):
         """
         (Session) -> none
         Parse the session announcer from the script and set it.
         """
-        with open(self.__script, 'r') as read_file:
-            text = ''.join(read_file.readlines())
-
-        pos = text.find('\n')
-        line = text[:pos]
-        while "Засідання веде" not in line:
-            pos2 = pos
-            pos = text.find('\n', pos2 + 1)
-            line = text[pos2:pos]
         pattern = r'[А-Я]\.[А-Я]\.[А-Я]+'
-        announcer = re.search(pattern, line)
-
-        self.announcer = announcer
+        with open(self.__script, 'r') as read_file:
+            for line in read_file.readlines():
+                if "веде" in line or "Веде" in line:
+                    announcer = re.search(pattern, line)
+                    self.announcer = announcer[0]
+                    break
 
     def create_politicians(self):
         """
-        (Session) -> list(Politician)
+        (Session) -> set(Politician)
         Creates and updates Politicians objects.
         Assigns them to corresponding convocation.
         """
-        politicians = list()
+        politicians_names = [pol.name for pol in self.convocation.politicians_list]
+        politicians = set()
         pattern = r'[А-Я]+\s[А-Я]\.[А-Я]\.'
 
         with open(self.__script, 'r') as read_file:
@@ -134,9 +133,12 @@ class Session:
                         pol = self.announcer
                     else:
                         pol = pol[0]
-                    politician_obj = Politician(name=pol,
-                                                convocation_no=[self.convocation_no])
-                    politicians.append(politician_obj)
+                    if pol not in politicians_names:
+                        politician_obj = Politician(name=pol,
+                                                    convocation_no=[self.convocation.no])
+                        politicians.add(politician_obj)
+                        politicians_names.append(pol)
+
         return politicians
 
     def format(self):
@@ -148,42 +150,50 @@ class Session:
                 # get rid of time comments
                 time_pattern = r'\d{2}:\d{2}:\d{2}'
                 if re.search(time_pattern, new_line):
-                    re.sub(time_pattern, '', new_line)
+                    new_line = re.sub(time_pattern, '', new_line)
 
                 # get rid of comments in brackets
-                if '(' and ')' in new_line:
-                    pos = new_line.find('(')
-                    pos2 = new_line.find(')')
-                    new_line = new_line[:pos] + new_line[pos2+1:]
-                elif '(' in new_line:
-                    pos = new_line.find('(')
-                    new_line = new_line[:pos]
-                elif ')' in new_line:
-                    pos = new_line.find(')')
-                    new_line = new_line[pos+1:]
+                brackets_pattern = r'\([^\(\)]+\)'
+                if re.search(brackets_pattern, new_line):
+                    new_line = re.sub(brackets_pattern, '', new_line)
 
                 # get rid of comments in capital letters
                 comment_pattern = r'[А-Я]+'
                 name_pattern = r'[А-Я]+\s[А-Я]\.[А-Я]\.'
-                if re.search(comment_pattern,new_line) and re.search(name_pattern, new_line) is None and\
+                if re.search(comment_pattern, new_line) and re.search(name_pattern, new_line) is None and\
                         'ГОЛОВУЮЧИЙ' not in new_line:
-                    re.sub(comment_pattern, '',new_line)
+                    re.sub(comment_pattern, '', new_line)
                 text += new_line
 
-            with (self.__script, 'w') as write_file:
+            with open(self.__script, 'w') as write_file:
                 write_file.write(text)
 
-    def to_phrases(self, politician):
+    def to_phrases(self):
         """
         (Session) -> None
         Divide the session script to phrases and analyse each.
         """
-        pass
+        phrase = ''
+        name_pattern = r'[А-Я]+\s[А-Я]\.[А-Я]\.'
 
-    def phrase_analysis(self, text):
+        with open(self.__script, 'r') as read_file:
+            for line in read_file.readlines():
+                if re.search(name_pattern, line) or 'ГОЛОВУЮЧИЙ' in line:
+                    if phrase:
+                        self.__phrase_analysis(phrase)
+                    phrase = ''
+                    phrase += line
+
+    def __phrase_analysis(self, text):
         """
         (Session) -> list(Idea)
         Returns list of Ideas
         """
+        path = os.path.relpath('modules/session/ideas.txt', os.getcwd())
+        kw = []
+        with open(path, 'r') as read_file:
+            for line in read_file.readlines():
+                kw.append(line[:-1])
+
         ideas = list()
         return ideas

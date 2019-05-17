@@ -5,8 +5,8 @@ class Convocation:
     def __init__(self, no=8, amount=450, json_path=''):
         self.no = no
         self.politicians_amount = amount
-        self.__politicians_list = None
-        self.__sessions_calendar = None
+        self.__politicians_list = list()
+        self.__sessions_calendar = list()
         self.__ideas = None
 
         self.__json_file = json_path
@@ -53,9 +53,18 @@ class Convocation:
     def __contains__(self, politician):
         """
         (Convocation, Politician) -> bool
-        Checks if Politician o
+        Checks if Politician is in Convocarion.
         """
-        return politician in self.__politicians_list
+        return politician.name in [pol.name for pol in self.__politicians_list]
+
+    def search_politician(self, name):
+        """
+        (Convocation, str) -> Politician
+        Find Politician by name in the Convocation.__politicians_list.
+        """
+        for politician in self.__politicians_list:
+            if politician.name == name:
+                return politician
 
     def politician_calendar(self, politician):
         """
