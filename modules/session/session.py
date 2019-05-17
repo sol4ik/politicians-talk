@@ -11,6 +11,8 @@ import os
 
 from .exception.exception import ParseError
 
+from .analyser.analyser import Analyser
+
 
 class Session:
     """
@@ -142,6 +144,12 @@ class Session:
         return politicians
 
     def format(self):
+        to_del_words = ''
+        with open(os.path.relpath('modules/session/docs/to_del_words.txt',
+                                  os.getcwd()), 'r') as read_file:
+            for line in read_file.readlines():
+                to_del_words = to_del_words + line[:-1] + ' '
+
         text = ''
         with open(self.__script, 'r') as read_file:
             for line in read_file.readlines():
@@ -163,6 +171,19 @@ class Session:
                 if re.search(comment_pattern, new_line) and re.search(name_pattern, new_line) is None and\
                         'ГОЛОВУЮЧИЙ' not in new_line:
                     re.sub(comment_pattern, '', new_line)
+
+                #  get rid of insignificant words
+                words = new_line.split(' ')
+                new_line = ''
+                for word in words:
+                    if word.lower() not in to_del_words:
+                        new_line = new_line + ' ' + word
+
+                # merge 'не' with the related word
+                new_line = re.sub(' не ', ' не^', new_line)
+
+                if new_line == '\n':
+                    continue
                 text += new_line
 
             with open(self.__script, 'w') as write_file:
@@ -180,20 +201,30 @@ class Session:
             for line in read_file.readlines():
                 if re.search(name_pattern, line) or 'ГОЛОВУЮЧИЙ' in line:
                     if phrase:
-                        self.__phrase_analysis(phrase)
+                        if 'ГОЛОВУЮЧИЙ' not in phrase:
+                            politician = re.search(name_pattern, phrase)[0]
+                            phrase = re.sub(name_pattern, '', phrase)
+                        else:
+                            politician = self.announcer
+                            phrase = re.sub('ГОЛОВУЮЧИЙ', '', phrase)
+
+                        self.__phrase_analysis(politician, phrase)
                     phrase = ''
                     phrase += line
 
-    def __phrase_analysis(self, text):
+    def __phrase_analysis(self, politician, phrase):
         """
         (Session) -> list(Idea)
         Returns list of Ideas
         """
-        path = os.path.relpath('modules/session/ideas.txt', os.getcwd())
-        kw = []
-        with open(path, 'r') as read_file:
-            for line in read_file.readlines():
-                kw.append(line[:-1])
+        politician = self.convocation.search_politician(politician)
 
-        ideas = list()
-        return ideas
+        analyser = Analyser(phrase)
+        analyser.analyse()
+        topics = analyser.topics
+        for topic in topics:
+            idea = Idea(name=topic, politician=politician, session_date=self.session_date)
+            idea.context = phrase
+
+            politician.ideas.append(idea)
+
