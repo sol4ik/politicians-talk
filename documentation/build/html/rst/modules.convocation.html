@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>modules.convocation package &#8212; politicians-talk 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="modules.create_db package" href="modules.create_db.html" />
+    <link rel="prev" title="modules package" href="modules.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="modules-convocation-package">
+<h1>modules.convocation package<a class="headerlink" href="#modules-convocation-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-modules.convocation.convocation">
+<span id="modules-convocation-convocation-module"></span><h2>modules.convocation.convocation module<a class="headerlink" href="#module-modules.convocation.convocation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modules.convocation.convocation.Convocation">
+<em class="property">class </em><code class="descclassname">modules.convocation.convocation.</code><code class="descname">Convocation</code><span class="sig-paren">(</span><em>no=8</em>, <em>amount=450</em>, <em>json_path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#modules.convocation.convocation.Convocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representation of politicians’ Convocation.</p>
+<dl class="attribute">
+<dt id="modules.convocation.convocation.Convocation.ideas">
+<code class="descname">ideas</code><a class="headerlink" href="#modules.convocation.convocation.Convocation.ideas" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Convocation) -&gt; list()
+Returns value of Convocation object __ideas field.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.convocation.convocation.Convocation.ideas_rating">
+<code class="descname">ideas_rating</code><a class="headerlink" href="#modules.convocation.convocation.Convocation.ideas_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Convocation) -&gt; dict()
+Returns value of Convocation __ideas_rating field.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.convocation.convocation.Convocation.json_file">
+<code class="descname">json_file</code><a class="headerlink" href="#modules.convocation.convocation.Convocation.json_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Convocation) -&gt; str
+Returns value of Convocation object __json_file field.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modules.convocation.convocation.Convocation.politician_calendar">
+<code class="descname">politician_calendar</code><span class="sig-paren">(</span><em>politician</em><span class="sig-paren">)</span><a class="headerlink" href="#modules.convocation.convocation.Convocation.politician_calendar" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Convocation, Politician) -&gt; list(list)
+Function for creating a calendar of politician’s presence on the sessions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.convocation.convocation.Convocation.politicians_list">
+<code class="descname">politicians_list</code><a class="headerlink" href="#modules.convocation.convocation.Convocation.politicians_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Convocation) -&gt; list()
+Returns value of Convocation object __politicians_list field.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modules.convocation.convocation.Convocation.search_politician">
+<code class="descname">search_politician</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#modules.convocation.convocation.Convocation.search_politician" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Convocation, str) -&gt; Politician
+Find Politician by name in the Convocation.__politicians_list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.convocation.convocation.Convocation.sessions_calendar">
+<code class="descname">sessions_calendar</code><a class="headerlink" href="#modules.convocation.convocation.Convocation.sessions_calendar" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Convocation) -&gt; list()
+Returns value of Convocation object __sessions_calendar field.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modules.convocation">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-modules.convocation" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">politicians-talk</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">modules package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">modules.convocation package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-modules.convocation.convocation">modules.convocation.convocation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-modules.convocation">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules.create_db.html">modules.create_db package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.idea.html">modules.idea package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.politician.html">modules.politician package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.session.html">modules.session package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-modules">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.session.html">modules.session package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.session.exception.html">modules.session.exception package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.session.analyser.html">modules.session.analyser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.idea.html">modules.idea package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.politician.html">modules.politician package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">modules.convocation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-modules.convocation.convocation">modules.convocation.convocation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-modules.convocation">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">modules package</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">modules package</a></li>
+      <li>Next: <a href="modules.create_db.html" title="next chapter">modules.create_db package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, solka13Leio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/rst/modules.convocation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>modules.politician package &#8212; politicians-talk 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="modules.session package" href="modules.session.html" />
+    <link rel="prev" title="modules.idea package" href="modules.idea.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="modules-politician-package">
+<h1>modules.politician package<a class="headerlink" href="#modules-politician-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-modules.politician.politician">
+<span id="modules-politician-politician-module"></span><h2>modules.politician.politician module<a class="headerlink" href="#module-modules.politician.politician" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="modules.politician.politician.Politician">
+<em class="property">class </em><code class="descclassname">modules.politician.politician.</code><code class="descname">Politician</code><span class="sig-paren">(</span><em>name=''</em>, <em>convocation_no=[]</em>, <em>json_path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#modules.politician.politician.Politician" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing politician of Ukrainian Verkhovna Rada.</p>
+<dl class="classmethod">
+<dt id="modules.politician.politician.Politician.from_json">
+<em class="property">classmethod </em><code class="descname">from_json</code><span class="sig-paren">(</span><em>file_path</em><span class="sig-paren">)</span><a class="headerlink" href="#modules.politician.politician.Politician.from_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>(str) -&gt; Politician
+Function for creating a Politician object with the data from the .json file.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.politician.politician.Politician.ideas">
+<code class="descname">ideas</code><a class="headerlink" href="#modules.politician.politician.Politician.ideas" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Politician) -&gt; list(str)
+Returns list of Politician’s ideas.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.politician.politician.Politician.ideas_rating">
+<code class="descname">ideas_rating</code><a class="headerlink" href="#modules.politician.politician.Politician.ideas_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Politician, int) -&gt; dict
+Returns value of Politican __ideas_rating field.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.politician.politician.Politician.ideas_timeline">
+<code class="descname">ideas_timeline</code><a class="headerlink" href="#modules.politician.politician.Politician.ideas_timeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Politician, int) -&gt; dict
+Returns value of Politician __ideas_timeline field.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.politician.politician.Politician.json_file">
+<code class="descname">json_file</code><a class="headerlink" href="#modules.politician.politician.Politician.json_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Politician) -&gt; list(str)
+Returns path to .json file on Politician object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="modules.politician.politician.Politician.presence">
+<code class="descname">presence</code><a class="headerlink" href="#modules.politician.politician.Politician.presence" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Politician) -&gt; list(str)
+Returns list of dates when Politician was present at the sessions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="modules.politician.politician.Politician.to_json">
+<code class="descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#modules.politician.politician.Politician.to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Politician) -&gt; .json file
+Function for writing all the data on Politician object to a .json file.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-modules.politician">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-modules.politician" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">politicians-talk</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">modules package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="modules.convocation.html">modules.convocation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.create_db.html">modules.create_db package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules.idea.html">modules.idea package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">modules.politician package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-modules.politician.politician">modules.politician.politician module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-modules.politician">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules.session.html">modules.session package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-modules">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.session.html">modules.session package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.session.exception.html">modules.session.exception package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.session.analyser.html">modules.session.analyser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.idea.html">modules.idea package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">modules.politician package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-modules.politician.politician">modules.politician.politician module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-modules.politician">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.convocation.html">modules.convocation package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">modules package</a><ul>
+      <li>Previous: <a href="modules.idea.html" title="previous chapter">modules.idea package</a></li>
+      <li>Next: <a href="modules.session.html" title="next chapter">modules.session package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, solka13Leio.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/rst/modules.politician.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

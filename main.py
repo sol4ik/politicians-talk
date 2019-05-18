@@ -5,8 +5,6 @@ from modules.session.session import Session
 
 from modules.session.exception.exception import ParseError
 
-from modules.create_db.create_db import to_db
-
 import os
 import re
 
