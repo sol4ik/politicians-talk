@@ -77,7 +77,10 @@ class Session:
         Parse the script text from the API.
         """
         print(self.__url)
-        page_response = requests.get(self.__url, timeout=5)
+        try:
+            page_response = requests.get(self.__url, timeout=10)
+        except Exception:
+            raise ParseError(self.session_date)
         page_content = BeautifulSoup(page_response.content, "html.parser")
 
         text_content = []

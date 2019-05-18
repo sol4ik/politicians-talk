@@ -10,67 +10,72 @@ import re
 
 import time
 
-convocations = list()
-sessions = list()
-politicians = set()
 
-start = time.time()
-print('> start')  # to track progress
-for filename in os.listdir('docs/stenograms_lists'):
-    # if filename != "stenograms.list":
-    if filename == "stenograms_skl81.list":
-        path = 'docs/stenograms_lists/' + filename
-        path = os.path.relpath(path)
-        with open(path, 'r') as read_file:
-            print('>  parsing {}...'.format(filename))  # to track progress
-            # create Convocation object
-            no_pattern = r'\d'  # get convocation number
-            no = re.search(no_pattern, filename)
-            no = int(no[0])
+def main():
+    convocations = list()
+    sessions = list()
+    politicians = set()
 
-            new_conv = Convocation(no=no)
-            convocations.append(new_conv)
+    print('> start')  # to track progress
+    for filename in os.listdir('docs/stenograms_lists'):
+        # if filename != "stenograms.list":
+        if filename == "stenograms_skl8.list":
+            path = 'docs/stenograms_lists/' + filename
+            path = os.path.relpath(path)
+            with open(path, 'r') as read_file:
+                start = time.time()
+                print('>  parsing {}...'.format(filename))  # to track progress
+                # create Convocation object
+                no_pattern = r'\d'  # get convocation number
+                no = re.search(no_pattern, filename)
+                no = int(no[0])
 
-            # go through the urls
-            for line in read_file.readlines():
-                url = line[:-1]
+                new_conv = Convocation(no=no)
+                convocations.append(new_conv)
 
-                new_session = Session(convocation=new_conv)
-                sessions.append(new_session)
-                new_session.url = url
+                # go through the urls
+                for line in read_file.readlines():
+                    url = line[:-1]
 
-                new_session.set_date()
+                    new_session = Session(convocation=new_conv)
+                    sessions.append(new_session)
+                    new_session.url = url
 
-                date = new_session.session_date
-                print('>   parsing {} session...'. format(date))  # to track progress
+                    new_session.set_date()
 
-                try:
-                    new_session.parse_html()
-                except ParseError as err:
-                    print(err)
-                    continue
+                    date = new_session.session_date
+                    print('>   parsing {} session...'. format(date))  # to track progress
 
-                new_session.set_announcer()
-                print('>    formatting {} session...'.format(date))  # to track progress
-                new_session.format()
+                    try:
+                        new_session.parse_html()
+                    except ParseError as err:
+                        print(err)
+                        continue
 
-                print('>    creating\\updating politicians...'.format(date))  # to track progress
-                pols = new_session.create_politicians()
-                politicians = politicians.union(pols)
+                    new_session.set_announcer()
+                    print('>    formatting {} session...'.format(date))  # to track progress
+                    new_session.format()
 
-                new_conv.politicians_list.extend(pols)
+                    print('>    creating\\updating politicians...'.format(date))  # to track progress
+                    pols = new_session.create_politicians()
+                    for pol in pols:
+                        pol.ideas_rating()
+                        pol.ideas_timeline()
+                    politicians = politicians.union(pols)
 
-                print('>    dividing into phrases and analysing...'.format(date))  # to track progress
-                new_session.to_phrases()
+                    new_conv.politicians_list.extend(pols)
 
-print(time.time() - start)
-politicians = list(politicians)
-for pol in politicians:
-    print(pol)
-    for idea in pol.ideas:
-        print(idea.name, '|', idea.session_date, '|', idea.context[:50])
-    print('--------')
+                    print('>    dividing into phrases and analysing...'.format(date))  # to track progress
+                    new_session.to_phrases()
 
-                # get all Politician objs
-                # get all Convocation objs
-                # final update
+                    print('> {}'.format(time.time() - start))
+            new_conv.ideas_rating()
+    return convocations, politicians
+
+    # print(time.time() - start)
+    # politicians = list(politicians)
+    # for pol in politicians:
+    #     print(pol)
+    #     for idea in pol.ideas:
+    #         print(idea.name, '|', idea.session_date, '|', idea.context[:50])
+    #     print('--------')
