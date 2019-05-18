@@ -32,3 +32,11 @@ Base.metadata.create_all()
 
 Session = sessionmaker(bind=engine)
 s = Session()
+
+
+def to_db():
+    """
+    (py_object) -> None
+    Adds given object to tha data.db.
+    """
+    pass

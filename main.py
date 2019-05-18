@@ -5,6 +5,8 @@ from modules.session.session import Session
 
 from modules.session.exception.exception import ParseError
 
+from modules.create_db.create_db import to_db
+
 import os
 import re
 
@@ -12,6 +14,9 @@ import time
 
 
 def main():
+    """
+    Main function of the system.
+    """
     convocations = list()
     sessions = list()
     politicians = set()
@@ -72,10 +77,10 @@ def main():
             new_conv.ideas_rating()
     return convocations, politicians
 
-    # print(time.time() - start)
-    # politicians = list(politicians)
-    # for pol in politicians:
-    #     print(pol)
-    #     for idea in pol.ideas:
-    #         print(idea.name, '|', idea.session_date, '|', idea.context[:50])
-    #     print('--------')
+# print(time.time() - start)
+# politicians = list(politicians)
+# for pol in politicians:
+#     print(pol)
+#     for idea in pol.ideas:
+#         print(idea.name, '|', idea.session_date, '|', idea.context[:50])
+#     print('--------')
