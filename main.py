@@ -8,13 +8,16 @@ from modules.session.exception.exception import ParseError
 import os
 import re
 
+import time
+
 convocations = list()
 sessions = list()
 politicians = set()
 
+start = time.time()
 print('> start')  # to track progress
 for filename in os.listdir('docs/stenograms_lists'):
-    # if filename != "stenograms":
+    # if filename != "stenograms.list":
     if filename == "stenograms_skl81.list":
         path = 'docs/stenograms_lists/' + filename
         path = os.path.relpath(path)
@@ -53,19 +56,20 @@ for filename in os.listdir('docs/stenograms_lists'):
 
                 print('>    creating\\updating politicians...'.format(date))  # to track progress
                 pols = new_session.create_politicians()
-                politicians.union(pols)
+                politicians = politicians.union(pols)
 
                 new_conv.politicians_list.extend(pols)
 
                 print('>    dividing into phrases and analysing...'.format(date))  # to track progress
                 new_session.to_phrases()
 
-                # to_phrases
-                #   phrase_analysis
-                #   create Idea objs
-                #   update Politician objs
-                #   update Convocation objs
-                # update Session obj
+print(time.time() - start)
+politicians = list(politicians)
+for pol in politicians:
+    print(pol)
+    for idea in pol.ideas:
+        print(idea.name, '|', idea.session_date, '|', idea.context[:50])
+    print('--------')
 
                 # get all Politician objs
                 # get all Convocation objs

@@ -14,7 +14,9 @@ class Convocation:
         self.politicians_amount = amount
         self.__politicians_list = list()
         self.__sessions_calendar = list()
-        self.__ideas = None
+        self.__ideas = list()
+
+        self.__ideas_rating = None
 
         self.__json_file = json_path
 
@@ -112,7 +114,16 @@ class Convocation:
         """
         pass
 
+    @property
     def ideas_rating(self):
+        """
+        (Convocation) -> dict()
+        Returns value of Convocation __ideas_rating field.
+        """
+        return self.__ideas_rating
+
+    @ideas_rating.setter
+    def ideas_rating(self, value=None):
         """
         (Convocation) -> dict
         Function for creating a rating of the most popular ideas among politicians of current convocation.

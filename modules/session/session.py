@@ -118,12 +118,19 @@ class Session:
         Parse the session announcer from the script and set it.
         """
         pattern = r'[А-Я]\.[А-Я]\.[А-Я]+'
+        initials_pattern = r'[А-Я]\.[А-Я]\.'
         with open(self.__script, 'r') as read_file:
             for line in read_file.readlines():
                 if "веде" in line or "Веде" in line:
-                    announcer = re.search(pattern, line)
-                    self.announcer = announcer[0]
-                    break
+                    if re.search(pattern, line):
+                        announcer = re.search(pattern, line)[0]
+                        # get to the usual format
+                        initials = re.search(initials_pattern, line)[0]
+                        announcer = re.sub(initials_pattern, '', announcer)
+                        self.announcer = announcer + ' ' + initials
+                        break
+                    else:
+                        self.announcer = ''
 
     def create_politicians(self):
         """
@@ -182,7 +189,7 @@ class Session:
                 # get rid of comments in capital letters
                 comment_pattern = r'[А-Я]+'
                 name_pattern = r'[А-Я]+\s[А-Я]\.[А-Я]\.'
-                if re.search(comment_pattern, new_line) and re.search(name_pattern, new_line) is None and\
+                if re.search(comment_pattern, new_line) and not re.search(name_pattern, new_line) and\
                         'ГОЛОВУЮЧИЙ' not in new_line:
                     re.sub(comment_pattern, '', new_line)
 
@@ -194,7 +201,7 @@ class Session:
                         new_line = new_line + ' ' + word
 
                 # merge 'не' with the related word
-                new_line = re.sub(' не ', ' не^', new_line)
+                new_line = re.sub(' не ', ' неL', new_line)
 
                 if new_line == '\n':
                     continue
@@ -216,19 +223,23 @@ class Session:
                 if re.search(name_pattern, line) or 'ГОЛОВУЮЧИЙ' in line:
                     if phrase:
                         if 'ГОЛОВУЮЧИЙ' not in phrase:
-                            politician = re.search(name_pattern, phrase)[0]
-                            phrase = re.sub(name_pattern, '', phrase)
+                            politician = re.search(name_pattern, phrase)
+                            if politician:
+                                politician = politician[0]
+                                phrase = re.sub(name_pattern, '', phrase)
+                            else:
+                                phrase = ''
                         else:
                             politician = self.announcer
-                            phrase = re.sub('ГОЛОВУЮЧИЙ', '', phrase)
+                            phrase = re.sub('ГОЛОВУЮЧИЙ.', '', phrase)
 
                         dots = re.findall(r'\.', phrase)
                         if len(dots) > 1:
-                            print('-------------')
-                            print(phrase)
                             self.__phrase_analysis(politician, phrase)
-                    phrase = ''
-                    phrase += line
+                        # print(politician)
+                        # print(phrase)
+                        phrase = ''
+                phrase += line
 
     def __phrase_analysis(self, politician, phrase):
         """
@@ -241,10 +252,12 @@ class Session:
 
         analyser = Analyser(phrase)
         analyser.analyse()
-        topics = analyser.topics
-        for topic in topics:
-            idea = Idea(name=topic, politician=politician, session_date=self.session_date)
-            idea.context = phrase
+        if analyser.topics:
+            # print('|'.join(analyser.topics))
+            topics = analyser.topics
+            for topic in topics:
+                idea = Idea(name=topic, politician=politician, session_date=self.session_date)
+                idea.context = phrase
 
-            politician.ideas.append(idea)
-
+                politician.ideas.append(idea)
+                self.convocation.ideas.append(idea)

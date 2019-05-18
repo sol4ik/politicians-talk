@@ -15,8 +15,11 @@ class Politician:
         self.name = name
         self.convocation_no = convocation_no
 
-        self.__presence = None
+        self.__presence = list()
         self.__ideas = list()
+
+        self.__ideas_timeline = None
+        self.__ideas_rating = None
 
         self.__json_file = json_path
 
@@ -75,7 +78,16 @@ class Politician:
         """
         return self.name
 
+    @property
     def ideas_timeline(self):
+        """
+        (Politician, int) -> dict
+        Returns value of Politician __ideas_timeline field.
+        """
+        return self.__ideas_timeline
+
+    @ideas_timeline.setter
+    def ideas_timeline(self, value=None):
         """
         (Politician) -> dict
         Function for creating a timeline of politician's main ideas.
@@ -87,11 +99,20 @@ class Politician:
                 timeline[idea.session_date].append(idea)
             else:
                 timeline[idea.session_date] = [idea]
-        return timeline
+        self.__ideas_timeline = timeline
 
+    @property
+    def ideas_rating(self):
+        """
+        (Politician, int) -> dict
+        Returns value of Politican __ideas_rating field.
+        """
+        return self.__ideas_rating
+
+    @ideas_rating.setter
     def ideas_rating(self, n):
         """
-        (Politician) -> dict
+        (Politician, int) -> None
         Function for creating a rating of top [n] politician's main ideas.
         """
         counter = dict()
@@ -118,7 +139,7 @@ class Politician:
             top_n[max_key] = count
             count += 1
             counter[max_key] = 0
-        return top_n
+        self.__ideas_rating = top_n
 
     def to_json(self):
         """

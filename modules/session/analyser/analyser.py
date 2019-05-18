@@ -1,6 +1,8 @@
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.decomposition import NMF, LatentDirichletAllocation
 
+import os
+
 
 class Analyser:
     """
@@ -8,6 +10,17 @@ class Analyser:
     the Latent Dirichlet allocation and Non-negative matrix factorization
     methods.
     """
+    STOP_WORDS = ['який', 'яка', 'яке', 'які', 'що', 'такий',
+                  'така', 'таке', 'такі', 'щоб', 'щоби', 'ж', 'всі', 'все',
+                  'вся', 'весь', 'увесь', 'тому', 'і', 'та', 'а', 'але', 'або',
+                  'також', 'тож', 'отже', 'за', 'для', 'про', 'адже', 'в',
+                  'у', 'до', 'так', 'чи', 'як', 'де', 'коли', 'тоді',
+                  'там', 'ще', 'після', 'це', 'той', 'та', 'те', 'ті',
+                  'від', 'на', 'ми', 'ви', 'він', 'вона', 'я', 'ти', 'вони',
+                  'воно', 'цей', 'ця', 'це', 'ці', 'будь', 'ласка', 'вам',
+                  'нам', 'дякую', 'шановний', 'шановна', 'шановні', 'хто',
+                  'что', 'тут', 'по', 'згідно', 'зі', 'нашу', 'сьогодні']
+
     def __init__(self, phrase):
         """
         (Analyser, str) -> None
@@ -16,7 +29,7 @@ class Analyser:
         self.__phrase = phrase
 
         self.max_features = 1000
-        self.num_components = 3
+        self.num_components = 2
 
         self.__tf_idf_vectorizer = None
         self.__tf_idf_nmf = None
@@ -58,8 +71,8 @@ class Analyser:
         Creates tf-idf vectorizer and creates term-document matrix.
         """
         self.__tf_idf_vectorizer = TfidfVectorizer(max_df=0.95, min_df=2,
-                                                  max_features=self.max_features,
-                                           stop_words='english')
+                                                   max_features=self.max_features,
+                                                   stop_words=Analyser.STOP_WORDS)
         self.__tf_idf_nmf = self.__tf_idf_vectorizer.fit_transform(self.__phrase)
 
     def __nmf_learn(self):
@@ -78,7 +91,7 @@ class Analyser:
         """
         self.__tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                                max_features=self.max_features,
-                                               stop_words='english')
+                                               stop_words=Analyser.STOP_WORDS)
         self.__tf_lda = self.__tf_vectorizer.fit_transform(self.__phrase)
 
     def __lda_learn(self):
@@ -99,16 +112,26 @@ class Analyser:
         The analysis of the phrase with the two methods and post-processing of the results.
         """
         self.__format()
-        self.__nmf_learn()
-        self.__lda_learn()
+        try:
+            self.__nmf_learn()
+        except ValueError:  # after puring, no terms remain
+            pass
 
-        tfidf_features = self.__tf_idf_vectorizer.get_feature_names()
+        try:
+            self.__lda_learn()
+        except ValueError:  # after puring, no terms remain
+            pass
+
         nmf_topics = set()
-        for topic in self.__nmf.components_:
-            nmf_topics.add(tfidf_features[topic.argsort()[-1]])
-        tf_features = self.__tf_vectorizer.get_feature_names()
-        lda_topics = set()
-        for topic in self.__lda.components_:
-            lda_topics.add(tf_features[topic.argsort()[-1]])
+        if self.__nmf:
+            tfidf_features = self.__tf_idf_vectorizer.get_feature_names()
+            for topic in self.__nmf.components_:
+                nmf_topics.add(tfidf_features[topic.argsort()[-1]])
 
-        self.__topics = nmf_topics.intersection(lda_topics)
+        lda_topics = set()
+        if self.__lda:
+            tf_features = self.__tf_vectorizer.get_feature_names()
+            for topic in self.__lda.components_:
+                lda_topics.add(tf_features[topic.argsort()[-1]])
+
+        self.__topics = nmf_topics.intersection(lda_topics)  # can be an empty set
