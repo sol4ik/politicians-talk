@@ -33,7 +33,9 @@ ___
 Для розробки
 --
 Підготовка середовища:
-
+    
+    git clone https://github.com/solka13Lenio/politicians-talk.git
+    
     pip install virtualenv
     
     virtualenv pt-env
