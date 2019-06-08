@@ -45,6 +45,7 @@ ___
     
     cd docs/scripts
     mkdir skl1 skl2 skl3 skl4 skkl5 skl6 skl7 skl8
+    cd ../..
 
 Запуск головного модуля для аналізу та створення бази даних:
 
