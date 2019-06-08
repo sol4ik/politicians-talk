@@ -42,6 +42,9 @@ ___
     source pt-env/bin/activate
     
     pip install -r requirements.txt
+    
+    cd docs/scripts
+    mkdir skl1 skl2 skl3 skl4 skkl5 skl6 skl7 skl8
 
 Запуск головного модуля для аналізу та створення бази даних:
 
